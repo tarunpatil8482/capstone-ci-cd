@@ -4,7 +4,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --user -r requirements.txt
 
-# ---------- RUNTIME STAGE ----------
+# ---- runtime stage ----
 FROM python:3.11-slim
 WORKDIR /app
 
@@ -12,9 +12,11 @@ RUN useradd appuser
 USER appuser
 
 COPY --from=builder /root/.local /home/appuser/.local
-COPY app.py .
+
+COPY . .
 
 ENV PATH=/home/appuser/.local/bin:$PATH
 EXPOSE 5000
 
 CMD ["python", "app.py"]
+
